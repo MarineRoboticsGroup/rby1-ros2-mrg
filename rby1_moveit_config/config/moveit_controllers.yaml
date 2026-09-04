@@ -78,6 +78,16 @@ moveit_simple_controller_manager:
       - head_1
     action_ns: follow_joint_trajectory
     default: false
+  
+  #rby1_base_controller:
+  #  type: FollowJointTrajectory
+  #  action_ns: follow_joint_trajectory
+  #  default: false
+  #  joints:
+  #    - right_wheel
+  #    - left_wheel
+  #  action_ns: follow_joint_trajectory
+  #  default: false
     
   rby1_wholebody_controller:
     type: FollowJointTrajectory

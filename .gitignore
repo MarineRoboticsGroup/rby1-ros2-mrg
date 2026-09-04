@@ -1,2 +1,6 @@
-__pycahce__
+__pycache__
 *.pyc
+**/build
+**/install
+**/log
+**ikcache

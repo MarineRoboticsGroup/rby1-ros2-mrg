@@ -626,6 +626,22 @@
         </visual>
     </link>
 
+    <link name="link_right_eef"/>
+
+    <link name="link_left_eef"/>
+
+    <link name="link_right_realsense">
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.065 0.065 0.065"/>
+            </geometry>
+        </collision>
+    </link>
+
+
+    <link name="link_left_realsense"/>
+
     <!-- link_head_0 -->
     <link name="link_head_0">
         <inertial>
@@ -674,13 +690,73 @@
         </visual>
     </link>
 
+    <!-- Right LiDAR, 270° FOV from –135° to +135° -->
+    <link name="lidar_right_link">
+    <!-- (unchanged inertial/collision/visual) -->
+        <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.125"/>
+        <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001" />
+        </inertial>
+
+        <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+            <cylinder radius="0.0508" length="0.055"/>
+        </geometry>
+        </collision>
+
+        <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+            <cylinder radius="0.0508" length="0.055"/>
+        </geometry>
+        <material name="LightBlue">
+            <color rgba="0.11 0.37 0.56 1.0"/>
+        </material>
+        </visual>
+    </link>
+
+    <!-- Left LiDAR, 270° FOV from –135° to +135° -->
+    <link name="lidar_left_link">
+    <!-- (unchanged inertial/collision/visual) -->
+        <inertial>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <mass value="0.125"/>
+        <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001" />
+        </inertial>
+
+        <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+            <cylinder radius="0.0508" length="0.055"/>
+        </geometry>
+        </collision>
+
+        <visual>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+            <cylinder radius="0.0508" length="0.055"/>
+        </geometry>
+        <material name="LightBlue">
+            <color rgba="0.11 0.37 0.56 1.0"/>
+        </material>
+        </visual>
+    </link>
+
 
     <!-- =========================
          Joints
          ========================= -->
 
     <!-- (1) world와 base를 planar로 연결 -->
-    <joint name="world_to_base" type="planar">
+    <!-- <joint name="world_to_base" type="planar">
+        <parent link="world"/>
+        <child link="base"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint> -->
+
+    <joint name="world_to_base" type="fixed">
         <parent link="world"/>
         <child link="base"/>
         <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -818,8 +894,10 @@
         <child link="link_right_arm_6"/>
         <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
         <axis xyz="0 0 1"/>
+        <!-- <limit effort="8.0" acceleration="10.0" velocity="2.094395102"
+               lower="-2.792526803" upper="2.792526803"/> -->
         <limit effort="8.0" acceleration="10.0" velocity="2.094395102"
-               lower="-2.792526803" upper="2.792526803"/>
+               lower="-2.70" upper="2.70"/>
     </joint>
 
     <!-- Left arm joints -->
@@ -882,8 +960,10 @@
         <child link="link_left_arm_6"/>
         <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
         <axis xyz="0 0 1"/>
+        <!-- <limit effort="8.0" acceleration="10.0" velocity="2.094395102"
+               lower="-2.792526803" upper="2.792526803"/> -->
         <limit effort="8.0" acceleration="10.0" velocity="2.094395102"
-               lower="-2.792526803" upper="2.792526803"/>
+               lower="-2.70" upper="2.70"/>
     </joint>
 
     <!-- Tool / Sensor joints (Right) -->
@@ -945,6 +1025,36 @@
         <limit effort="1000" velocity="0.05" lower="0" upper="0.05"/>
     </joint>
 
+    <!-- Virtual EEF joints -->
+
+    <joint name="right_eef" type="fixed">
+        <parent link="link_right_arm_6"/>
+        <child link="link_right_eef"/>
+        <origin rpy ="0.0 0.0 0.0" xyz="0.0 0.0 -0.2578"/>
+    </joint>
+
+    <joint name="left_eef" type="fixed">
+        <parent link="link_left_arm_6"/>
+        <child link="link_left_eef"/>
+        <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 -0.2578"/>
+    </joint>
+
+    <!-- Wrist camera joints -->
+    
+    <joint name="right_realsense" type="fixed">
+        <parent link="link_right_arm_6"/>
+        <child link="link_right_realsense"/>
+        <origin rpy="0.0 0.0 0.0" xyz="0.0 -0.053 -0.0243"/>
+    </joint>
+    
+    <joint name="left_realsense" type="fixed">
+        <parent link="link_left_arm_6"/>
+        <child link="link_left_realsense"/>
+        <origin rpy="0.0 0.0 0.0" xyz="0.0 0.053 -0.0243"/>
+    </joint>
+
+
+
     <!-- Head joints -->
     <joint name="head_base" type="fixed">
         <parent link="link_torso_5"/>
@@ -966,6 +1076,18 @@
         <origin rpy="0.0 0.0 0.0" xyz="0.0 0.0 0.0"/>
         <axis xyz="0 1 0"/>
         <limit effort="1000" velocity="3.14" lower="-0.35" upper="1.57"/>
+    </joint>
+
+    <joint name="lidar_right_joint" type="fixed">
+        <parent link="base"/>
+        <child link="lidar_right_link"/>
+        <origin xyz="0.228 -0.18 0.23" rpy="0 0 -0.7854"/>
+    </joint>
+
+    <joint name="lidar_left_joint" type="fixed">
+        <parent link="base"/>
+        <child link="lidar_left_link"/>
+        <origin xyz="0.228 0.18 0.23" rpy="0 0 0.7854"/>
     </joint>
 
 </robot>

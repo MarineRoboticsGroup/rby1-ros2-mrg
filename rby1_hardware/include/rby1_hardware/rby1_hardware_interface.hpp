@@ -43,6 +43,8 @@ private:
   std::vector<double> joint_positions_;
   std::vector<double> joint_commands_;
   std::vector<std::string> joint_names_;
+  std::vector<double> joint_velocities_;
+  std::vector<double> prev_joint_positions_;
 
   rclcpp::Node::SharedPtr node_;
   rclcpp::Publisher<sensor_msgs::msg::JointState>::SharedPtr joint_state_pub_;
@@ -51,6 +53,7 @@ private:
   std::mutex state_mutex_;
   rb::RobotState<rb::y1_model::A> latest_state_;
   bool state_received_ = false;
+  bool stop_check = true;
 };
 
 }  // namespace rby1_hardware

@@ -10,7 +10,7 @@ import time
 
 D2R = np.pi / 180
 
-sys.path.append('/home/ian/rby1_ws/rby1/rby1-sdk')
+sys.path.append('/home/nvidia/rby1-sdk')
 import rby1_sdk
 
 class GlobalVariable:
@@ -44,8 +44,9 @@ def main(args=None):
     ros_thread = Thread(target=rclpy.spin, args=(subscriber,))
     ros_thread.start()
 
-    robot = rby1_sdk.create_robot_a("192.168.100.47:50051") # for real rby1
+    #robot = rby1_sdk.create_robot_a("192.168.100.47:50051") # for real rby1
     # robot = rby1_sdk.create_robot_a("localhost:50051") # for real rby1
+    robot = rby1_sdk.create_robot_a("192.168.1.6:50051") # for Eric's Mujoco sim
     robot.connect()
 
     print(robot.set_parameter("joint_position_command.cutoff_frequency", "5"))

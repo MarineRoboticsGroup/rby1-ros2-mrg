@@ -5,10 +5,12 @@ controller_manager:
 
     rby1_right_arm_controller:
       type: joint_trajectory_controller/JointTrajectoryController
+      joints: [right_arm_0, right_arm_1, right_arm_2, right_arm_3, right_arm_4, right_arm_5, right_arm_6]
 
 
     rby1_left_arm_controller:
       type: joint_trajectory_controller/JointTrajectoryController
+      joints: [left_arm_0, left_arm_1, left_arm_2, left_arm_3, left_arm_4, left_arm_5, left_arm_6]
 
 
     rby1_torso_controller:
@@ -19,10 +21,12 @@ controller_manager:
       type: joint_trajectory_controller/JointTrajectoryController
       allow_partial_joints: true 
 
-
     rby1_head_controller:
       type: joint_trajectory_controller/JointTrajectoryController
-
+      
+    #rby1_base_controller:
+    #  type: joint_trajectory_controller/JointTrajectoryController
+    #  joints: [right_wheel, left_wheel]
 
     rby1_wholebody_controller:
       type: joint_trajectory_controller/JointTrajectoryController
@@ -42,6 +46,7 @@ rby1_right_arm_controller:
       - right_arm_4
       - right_arm_5
       - right_arm_6
+      - ee_right
     command_interfaces:
       - position
       - velocity
@@ -58,6 +63,7 @@ rby1_left_arm_controller:
       - left_arm_4
       - left_arm_5
       - left_arm_6
+      - ee_left
     command_interfaces:
       - position
       - velocity
@@ -90,6 +96,7 @@ rby1_dualarm_controller:
       - right_arm_4
       - right_arm_5
       - right_arm_6
+      - ee_right
       - left_arm_0
       - left_arm_1
       - left_arm_2
@@ -97,6 +104,7 @@ rby1_dualarm_controller:
       - left_arm_4
       - left_arm_5
       - left_arm_6
+      - ee_left
     command_interfaces:
       - position
       - velocity
@@ -114,6 +122,17 @@ rby1_head_controller:
     state_interfaces:
       - position
       - velocity
+#rby1_base_controller:
+#  ros__parameters:
+#    joints:
+#      - right_wheel
+#      - left_wheel
+#    command_interfaces:
+#      - position
+#      - velocity
+#    state_interfaces:
+#      - position
+#      - velocity
 rby1_wholebody_controller:
   ros__parameters:
     joints:

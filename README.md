@@ -96,18 +96,10 @@ This command launches the robot bringup process:
 ros2 launch rby1_bringup bringup.launch robot_ip:=<Rpc_ip_address:port_number>
 ```
 
-After bringup, you can verify the hardware and controller status from the controller manager UI.
-
-![Controller manager example](assets/example_1.png)
-
 #### 2. MoveIt Config
 ```shell
 ros2 launch rby1_moveit_config rby1_moveit.launch
 ```
-
-The image below shows an example of MoveIt-based manipulation control in RViz.
-
-![MoveIt-based control example](assets/example_2.png)
 
 #### Available Controllers
 
@@ -148,15 +140,3 @@ ros2 run rby1_mobile_control mobile_publisher
 ros2 run rby1_subscriber_pkg 07_mobile_control
 ```
 
-## Package overview
-
-The diagram below shows a simple relationship between the main packages in this workspace.
-If your Markdown viewer supports Mermaid, it will be rendered as a diagram.
-
-```mermaid
-graph TD
-    A[rby1_bringup] -->|launches robot system| B[rby1_description]
-    A -->|starts hardware stack| C[rby1_hardware]
-    A -->|used with| D[rby1_moveit_config]
-    E[rby1_mobile_control] -->|publishes mobile control msg| F[rby1_subscriber_pkg]
-```
