@@ -1,1 +1,185 @@
-/home/nvidia/robotcommands.txt
+To run pure keyboard control for base:
+ros2 launch rby1_bringup bringup.launch.py robot_ip:=192.168.30.1:50051
+ros2 run pynput_teleop_twist_keyboard pynput_teleop_twist_keyboard –ros-args –remap cmd_vel:=rby1_base_controller/cmd_vel
+
+To run simple manipulation demo (updated 3/31/26):
+ros2 launch rby1_description nav_rby1.launch.py enable_mux:=false
+ros2 launch zed_wrapper zed_camera.launch.py camera_model:=zed2i camera_name:=zed2i
+ros2 run tf2_ros static_transform_publisher 0 0 0.041 0 0 0 1 link_head_2 zed2i_camera_link
+ros2 run apriltag_detector apriltag_detector_node
+rviz2
+ros2 launch rby1_moveit_config rby1_moveit.launch.py use_rviz:=false
+ros2 run rby1_moveit_client moveit_gripper_test
+
+To run manipulation demo:
+ros2 launch apriltag_detector apriltag_detector_launch.py
+ros2 launch rby1_bringup bringup.launch.py robot_ip:=192.168.30.1:50051
+ros2 launch rby1_moveit_config rby1_moveit.launch.py (use_rviz:=false)
+ros2 run rby1_moveit_client moveit_gripper_base_test
+
+To run navigation demo:
+ros2 launch rby1_description nav_rby1.launch.py
+rviz2
+
+To run navigation apriltag demo (in progress):
+ros2 launch rby1_description nav_rby1.launch.py (enable_mux:=false)
+rviz2
+ros2 launch apriltag_detector apriltag_detector_launch.py
+ros2 run rby1_moveit_client apriltag_to_nav2_test
+
+To run object record script for gsplat (8/14/2025):
+ros2 launch rby1_bringup bringup.launch.py robot_ip:=192.168.30.1:50051
+ros2 launch rby1_moveit_config rby1_moveit.launch.py use_rviz:=false
+ros2 launch zed_wrapper zed_camera.launch.py camera_model:=zed2i camera_name:=zed2i
+ros2 run tf2_ros static_transform_publisher 0 0 0.041 0 0 0 1 link_head_2 zed2i_camera_link
+ros2 run relative_tf_publisher relative_tf_pub
+ros2 run rby1_moveit_client moveit_object_record
+(in /media/nvidia/.../bagfiles) ros2 bag record --max-cache-size 300000000 /zed2i/zed_node/left/image_rect_color /zed2i/zed_node/left/camera_info /zed2i/zed_node/depth/depth_registered /tf_static /tf /relative_transform /waiting_flag
+
+To run nav2 grasping task (8/14/2025):
+ros2 launch rby1_description nav_rby1.launch.py
+ros2 launch rby1_moveit_config rby1_moveit.launch.py use_rviz:=false
+ros2 launch apriltag_detector apriltag_detector_launch.py
+ros2 run rby1_moveit_client apriltag_nav2_gripper
+rviz2
+(to reset pose): ros2 run rby1_moveit_client moveit_reset_pose
+
+
+
+Miscellaneous:
+ros2 run tf2_ros static_transform_publisher 0 0 0 0 0 0 1 base base_link
+ros2 launch nav2_bringup navigation_launch.py use_sim_time:=false cmd_vel:=/rby1_base_controller/cmd_vel_unstamped
+ros2 run pynput_teleop_twist_keyboard pynput_teleop_twist_keyboard –ros-args –remap cmd_vel:=rby1_base_controller/cmd_vel
+
+
+SLAM dataset collection:
+ros2 launch zed_wrapper zed_camera.launch.py camera_model:=zed2i camera_name:=zed2i
+(check zed odom frame_id)
+ros2 run tf2_ros static_transform_publisher 0 0 0 0 0 0 1 link_head_2 zed2i_camera_link 
+
+zed2i_left_camera_frame
+
+ros2 launch rby1_moveit_config rby1_moveit.launch.py 
+(to control camera angle)
+ros2 launch rby1_bringup bringup.launch.py robot_ip:=192.168.30.1:50051
+ros2 run pynput_teleop_twist_keyboard pynput_teleop_twist_keyboard –ros-args –remap cmd_vel:=rby1_base_controller/cmd_vel
+ros2 bag record --max-cache-size 500000000 \
+/zed2i/zed_node/imu/data \
+/zed2i/zed_node/imu/data_raw \
+/zed2i/zed_node/left/camera_info \
+/zed2i/zed_node/left/image_rect_color \
+/zed2i/zed_node/depth/depth_registered \
+/tf \
+/tf_static \
+/rby1_base_controller/odom \
+/relative_transform
+
+
+[Collect gsplat data]
+ros2 launch rby1_bringup bringup.launch.py robot_ip:=192.168.30.1:50051
+ros2 launch rby1_moveit_config rby1_moveit.launch.py
+ros2 launch zed_wrapper zed_camera.launch.py camera_model:=zed2i camera_name:=zed2i
+ros2 run tf2_ros static_transform_publisher 0 0 0 0 0 0 1 link_head_2 zed2i_camera_link 
+ros2 run relative_tf_publisher relative_tf_pub
+ros2 run rby1_moveit_client moveit_object_record
+ros2 bag record --max-cache-size 500000000 /zed2i/zed_node/left/image_rect_color /zed2i/zed_node/left/camera_info /zed2i/zed_node/depth/depth_registered /tf_static /tf /relative_transform
+
+[Collect Pyae fixed head camera data]
+ros2 launch rby1_bringup bringup.launch.py robot_ip:=192.168.30.1:50051
+ros2 launch rby1_moveit_config rby1_moveit.launch.py
+ros2 launch zed_wrapper zed_camera.launch.py camera_model:=zed2i camera_name:=zed2i
+ros2 run tf2_ros static_transform_publisher 0 0 0 0 0 0 1 link_head_2 zed2i_camera_link 
+ros2 run relative_tf_publisher relative_tf_pub
+ros2 run rby1_moveit_client moveit_coverage_scan2 --ros-args --params-file /home/nvidia/ros2_ws/install/rby1_moveit_client/share/rby1_moveit_client/config/moveit_coverage_scan_params.yaml
+ros2 bag record --max-cache-size 500000000 /zed2i/zed_node/left/image_rect_color /zed2i/zed_node/left/camera_info /zed2i/zed_node/depth/depth_registered /tf_static /tf /relative_transform
+
+[old realsense commands]
+ros2 launch realsense2_camera rs_launch.py depth_module.profile:=640x480x30 enable_color:=true
+ros2 launch realsense2_camera rs_launch.py \
+  depth_module.depth_profile:=848x480x30 \
+  depth_module.depth_format:=Z16 \
+  enable_color:=true \
+  enable_depth:=true \
+  align_depth.enable:=true \
+  json_file_path:="/home/nvidia/d405_high_accuracy.json" \
+  depth_module.enable_auto_exposure:=false \
+  depth_module.exposure:=40000
+ros2 launch realsense2_camera rs_launch.py   depth_module.depth_profile:=848x480x30 depth_module.depth_format:=Z16 enable_color:=true   enable_depth:=true   align_depth.enable:=true json_file_path:="/home/nvidia/d405_high_accuracy.json"
+
+
+[Collect Pyae moving wrist camera data]
+ros2 launch rby1_bringup bringup.launch.py robot_ip:=192.168.30.1:50051
+ros2 launch rby1_moveit_config rby1_moveit.launch.py
+ros2 launch realsense2_camera rs_launch.py   camera_name:=camera   camera_namespace:=camera   enable_color:=true   enable_depth:=true   depth_module.depth_profile:="848,480,30"   depth_module.depth_format:=Z16   align_depth.enable:=true   json_file_path:="/home/nvidia/d405_high_accuracy_post.json"   decimation_filter.enable:=true   decimation_filter.filter_magnitude:=2   spatial_filter.enable:=true   temporal_filter.enable:=true
+ros2 run rby1_moveit_client moveit_wrist_scan --ros-args \
+  --params-file /home/nvidia/ros2_ws/install/rby1_moveit_client/share/rby1_moveit_client/config/moveit_wrist_scan_params.yaml
+ros2 bag record --max-cache-size 500000000 /tf_static /tf /wrist_scan/state /camera/camera/color/camera_info /camera/camera/color/image_raw /camera/camera/depth/camera_info /camera/camera/depth/image_rect_raw /camera/camera/aligned_depth_to_color/camera_info /camera/camera/aligned_depth_to_color/image_raw
+
+# for package building
+colcon build --packages-select relative_tf_publisher
+
+ros2 run apriltag_detector apriltag_detector_node
+
+http://192.168.30.1:5173/controls
+
+ros2 bag record --max-cache-size 500000000 /zed2i/zed_node/left/image_rect_color /zed2i/zed_node/left/camera_info /zed2i/zed_node/depth/depth_registered /tf_static /tf
+
+# To run Coverage Scan [Pyae]
+# step 1: make sure wired connection 2 or equivalent is connect for ethernet
+ros2 launch rby1_bringup bringup.launch.py robot_ip:=192.168.30.1:50051
+ros2 launch rby1_moveit_config rby1_moveit.launch.py
+ros2 run rby1_moveit_client moveit_coverage_scan2 --ros-args --params-file /home/nvidia/ros2_ws/install/rby1_moveit_client/share/rby1_moveit_client/config/moveit_coverage_scan_params.yaml
+
+ros2 run rby1_moveit_client moveit_wrist_scan --ros-args \
+  --params-file /home/nvidia/ros2_ws/install/rby1_moveit_client/share/rby1_moveit_client/config/moveit_wrist_scan_params.yaml
+  
+# To get realsense
+ros2 launch realsense2_camera rs_launch.py depth_module.profile:=640x480x30 enable_color:=true
+
+# To get realsense (Jason)
+ros2 launch realsense2_camera rs_launch.py     device_type:=d405     camera_name:=d405     camera_namespace:=d405     depth_module.depth_profile:=848x480x30     depth_module.depth_format:=Z16     enable_color:=true     enable_depth:=true     align_depth.enable:=true     json_file_path:="/home/nvidia/d405_high_accuracy.json"
+# no pointcloud, 1280x720 from realsense
+ros2 launch realsense2_camera rs_launch.py     device_type:=d405     camera_name:=d405     camera_namespace:=d405     depth_module.depth_profile:=1280x720x5     depth_module.color_profile:=1280x720x5     align_depth.enable:=true
+
+
+# To get zed (Jason)
+ros2 launch zed_wrapper zed_camera.launch.py camera_model:=zed2i camera_name:=zed2i
+# (no tfs from zed)
+ros2 launch zed_wrapper zed_camera.launch.py   camera_model:=zed2i   camera_name:=zed2i   pos_tracking.publish_tf:=false   pos_tracking.publish_map_tf:=false   publish_tf:=false
+
+
+# calibrated transform for realsense optical frame to be correct
+ros2 run tf2_ros static_transform_publisher 0.01450 0.00154 0.02381 0.47762 0.51897 -0.48686 0.51528 link_right_realsense d405_link
+
+# calibrated transform for zed optical frame to be correct 
+ros2 run tf2_ros static_transform_publisher 0.01010 -0.00262 0.03941 -0.00221 0.00774 0.00502 0.99996 link_head_2 zed2i_camera_link
+
+
+ros2 run rby1_moveit_client wrist_scan_capture
+
+# To reset
+ros2 run rby1_moveit_client moveit_reset_pose
+
+-----------------
+# multi realsense
+
+ros2 launch realsense2_camera rs_launch.py     device_type:=d405     camera_name:=d405     camera_namespace:=d405     depth_module.depth_profile:=848x480x30     depth_module.depth_format:=Z16     enable_color:=true     enable_depth:=true     align_depth.enable:=true     json_file_path:="/home/nvidia/d405_high_accuracy.json"
+
+ros2 launch realsense2_camera rs_launch.py     device_type:=d435i     camera_name:=d435i     camera_namespace:=d435i     enable_color:=true     enable_depth:=true     enable_gyro:=true     enable_accel:=true     unite_imu_method:=2
+
+
+[Unipose grasp test]
+(run on external computer)
+ros2 launch zed_wrapper zed_camera.launch.py   camera_model:=zed2i   camera_name:=zed2i   pos_tracking.publish_tf:=false   pos_tracking.publish_map_tf:=false   publish_tf:=false
+<in ~/git/UniPose9D> /usr/bin/python3 infer/ros/live_pose_node.py --ros-args -p sam2_model_id:=facebook/sam2.1-hiera-large -p text_prompt:="bottle"
+
+(run on rby1)
+ros2 launch rby1_bringup bringup.launch.py robot_ip:=192.168.30.1:50051
+ros2 launch rby1_moveit_config rby1_moveit.launch.py
+ros2 run tf2_ros static_transform_publisher 0 0 0.041 0 0 0 1 link_head_2 zed2i_camera_link
+ros2 run tf2_ros static_transform_publisher 0 0 0 0 0 0 1 base world
+ros2 run rby1_moveit_client moveit_plane_collision
+ros2 run rby1_moveit_client moveit_unipose_test   --ros-args   --params-file /home/nvidia/ros2_ws/install/rby1_moveit_client/share/rby1_moveit_client/config/moveit_unipose_test_params.yaml
+
+(to zero after execution)
+ros2 run rby1_moveit_client moveit_reset_pose
