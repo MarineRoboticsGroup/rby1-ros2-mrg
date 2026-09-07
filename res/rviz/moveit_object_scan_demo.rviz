@@ -16,8 +16,9 @@ Panels:
         - /Pose3
         - /Axes1
         - /TF1
+        - /TF1/Frames1
       Splitter Ratio: 0.5
-    Tree Height: 412
+    Tree Height: 1776
   - Class: rviz_common/Help
     Name: Help
   - Class: rviz_common/Views
@@ -190,6 +191,7 @@ Visualization Manager:
             Alpha: 1
             Show Axes: false
             Show Trail: false
+            Value: true
           link_right_arm_0:
             Alpha: 1
             Show Axes: false
@@ -433,6 +435,7 @@ Visualization Manager:
             Alpha: 1
             Show Axes: false
             Show Trail: false
+            Value: true
           link_right_arm_0:
             Alpha: 1
             Show Axes: false
@@ -572,7 +575,7 @@ Visualization Manager:
       Use rainbow: true
       Value: true
     - Class: rviz_default_plugins/Image
-      Enabled: true
+      Enabled: false
       Max Value: 1
       Median window: 5
       Min Value: 0
@@ -584,7 +587,7 @@ Visualization Manager:
         History Policy: Keep Last
         Reliability Policy: Reliable
         Value: /d405/d405/color/image_raw
-      Value: true
+      Value: false
     - Class: rviz_default_plugins/Image
       Enabled: true
       Max Value: 1
@@ -597,7 +600,7 @@ Visualization Manager:
         Durability Policy: Volatile
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: /zed2i/zed_node/left/image_rect_color
+        Value: /zed2i/zed_node/rgb/color/rect/image
       Value: true
     - Alpha: 1
       Arrow Length: 0.30000001192092896
@@ -705,7 +708,7 @@ Visualization Manager:
         d405_depth_frame:
           Value: false
         d405_depth_optical_frame:
-          Value: false
+          Value: true
         d405_link:
           Value: false
         ee_finger_l1:
@@ -792,11 +795,11 @@ Visualization Manager:
           Value: false
         zed2i_left_camera_frame:
           Value: false
-        zed2i_left_camera_optical_frame:
-          Value: false
+        zed2i_left_camera_frame_optical:
+          Value: true
         zed2i_right_camera_frame:
           Value: false
-        zed2i_right_camera_optical_frame:
+        zed2i_right_camera_frame_optical:
           Value: false
       Marker Scale: 1
       Name: TF
@@ -823,10 +826,10 @@ Visualization Manager:
                                 zed2i_camera_link:
                                   zed2i_camera_center:
                                     zed2i_left_camera_frame:
-                                      zed2i_left_camera_optical_frame:
+                                      zed2i_left_camera_frame_optical:
                                         {}
                                     zed2i_right_camera_frame:
-                                      zed2i_right_camera_optical_frame:
+                                      zed2i_right_camera_frame_optical:
                                         {}
                           link_left_arm_0:
                             link_left_arm_1:
@@ -892,30 +895,30 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 3.165353775024414
+      Distance: 3.009507417678833
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.6910039782524109
-        Y: -0.2805105149745941
-        Z: 0.8409861922264099
+        X: 0.07392960041761398
+        Y: -0.17029310762882233
+        Z: 0.5438161492347717
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.3547963500022888
+      Pitch: 0.4197961688041687
       Target Frame: world
       Value: Orbit (rviz_default_plugins)
-      Yaw: 3.645144462585449
+      Yaw: 4.030135631561279
     Saved: ~
 Window Geometry:
   Displays:
     collapsed: false
-  Height: 1016
+  Height: 2022
   Help:
     collapsed: false
   Hide Left Dock: false
@@ -926,9 +929,9 @@ Window Geometry:
     collapsed: false
   MotionPlanning - Trajectory Slider:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd0000000100000000000002b40000039efc0200000008fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000004100fffffffb000000100044006900730070006c006100790073010000003d000001d9000000c900fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e0067000000010c000001f80000017d00fffffffb0000000800480065006c0070000000029a0000006e0000006e00fffffffb0000000a00560069006500770073000000028f000000a4000000a400fffffffb0000000a0049006d006100670065010000021c000000dd0000002800fffffffb0000000a0049006d00610067006501000002ff000000dc0000002800fffffffb0000000a0049006d00610067006501000002ce0000010d0000000000000000000004800000039e00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd0000000200000000000002b400000754fc0200000006fb00000044004d006f00740069006f006e0050006c0061006e006e0069006e00670020002d0020005400720061006a006500630074006f0072007900200053006c00690064006500720000000000ffffffff0000007000fffffffb000000100044006900730070006c0061007900730100000069000007540000017800fffffffb0000001c004d006f00740069006f006e0050006c0061006e006e0069006e0067000000010c000001f80000028e00fffffffb0000000800480065006c0070000000029a0000006e000000cf00fffffffb0000000a00560069006500770073000000028f000000a40000012300fffffffb0000000a0049006d00610067006501000002ce0000010d0000000000000000000000010000058a00000754fc0200000001fc00000069000007540000004500fffffffa000000010100000002fb0000000a0049006d0061006700650000000000ffffffff0000008c00fffffffb0000000a0049006d00610067006501000008f20000058a0000008c00ffffff000006260000075400000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Views:
     collapsed: false
-  Width: 1850
-  X: 70
-  Y: 27
+  Width: 3708
+  X: 132
+  Y: 64
