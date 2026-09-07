@@ -86,12 +86,12 @@ def generate_launch_description():
     	output='screen'
     )
 
-    init_base_on_start = Node(
-        package='rby1_moveit_client',
-        executable='init_base',
-        name='init_base_start',
-        output='screen'
-    )
+    # init_base_on_start = Node(
+    #     package='rby1_moveit_client',
+    #     executable='init_base',
+    #     name='init_base_start',
+    #     output='screen'
+    # )
 
     #init_base_on_exit = Node(
     #    package='rby1_moveit_client',
@@ -124,14 +124,14 @@ def generate_launch_description():
         ros2_control_node,
         controller_event_handler,
         rqt_controller_manager,
-        RegisterEventHandler(
-            OnProcessStart(
-                target_action=base_spawner,
-                on_start=[
-                    init_base_on_start
-                ]
-            )
-        ),
+        # RegisterEventHandler(
+        #     OnProcessStart(
+        #         target_action=base_spawner,
+        #         on_start=[
+        #             init_base_on_start
+        #         ]
+        #     )
+        # ),
         #RegisterEventHandler(
         #    OnProcessExit(
         #        target_action=base_spawner,
