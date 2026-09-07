@@ -634,12 +634,19 @@
         <collision>
             <origin xyz="0 0 0" rpy="0 0 0"/>
             <geometry>
-                <box size="0.065 0.065 0.065"/>
+                <box size="0.120 0.065 0.065"/>
             </geometry>
         </collision>
     </link>
 
-    <link name="link_left_realsense"/>
+    <link name="link_left_realsense">
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+            <geometry>
+                <box size="0.120 0.065 0.065"/>
+            </geometry>
+        </collision>
+    </link>
 
     <!-- link_head_0 -->
     <link name="link_head_0">
