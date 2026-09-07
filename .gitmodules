@@ -1,3 +1,0 @@
-[submodule "rby1_moveit_client"]
-	path = rby1_moveit_client
-	url = https://github.com/ericandwang/rby1_moveit_client.git
