@@ -161,6 +161,8 @@ ros2 run tf2_ros static_transform_publisher 0.01450 0.00154 0.02381 0.47762 0.51
 # calibrated transform for zed optical frame to be correct 
 ros2 run tf2_ros static_transform_publisher 0.01010 -0.00262 0.03941 -0.00221 0.00774 0.00502 0.99996 link_head_2 zed2i_camera_link
 
+# get static transform for moving base (world -> odom)
+ros2 run tf2_ros static_transform_publisher 0 0 0 0 0 0 1 world odom
 
 ros2 run rby1_moveit_client wrist_scan_capture
 
