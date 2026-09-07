@@ -1,5 +1,12 @@
 To run pure keyboard control for base:
 ros2 launch rby1_bringup bringup.launch.py robot_ip:=192.168.30.1:50051
+
+# running from workstation
+# port forwarding (upc)
+socat TCP-LISTEN:50051,fork,reuseaddr TCP:192.168.30.1:50051
+# bringup (from workstation, use upc ip)
+ros2 launch rby1_bringup bringup.launch.py robot_ip:=192.168.1.2:50051
+
 ros2 run pynput_teleop_twist_keyboard pynput_teleop_twist_keyboard –ros-args –remap cmd_vel:=rby1_base_controller/cmd_vel
 
 To run simple manipulation demo (updated 3/31/26):
