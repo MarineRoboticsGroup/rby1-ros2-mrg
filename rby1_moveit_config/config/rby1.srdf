@@ -324,6 +324,15 @@
         <joint name="left_arm_5" value="-0.174533"/>
         <joint name="left_arm_6" value="0"/>
     </group_state>
+    <group_state name="object_orbit_ready_left_arm" group="rby1_left_arm">
+        <joint name="left_arm_0" value="0"/>
+        <joint name="left_arm_1" value="0."/>
+        <joint name="left_arm_2" value="0"/>
+        <joint name="left_arm_3" value="-2.094"/>
+        <joint name="left_arm_4" value="0"/>
+        <joint name="left_arm_5" value="1.222"/>
+        <joint name="left_arm_6" value="0"/>
+    </group_state>
 
     <group_state name="arm_right_all_above_table" group="arm_right_all">
         <!-- <joint name="torso_0" value="0"/>
@@ -347,6 +356,15 @@
         <joint name="right_arm_3" value="-1.570796"/>
         <joint name="right_arm_4" value="1.047198"/>
         <joint name="right_arm_5" value="-0.261799"/>
+        <joint name="right_arm_6" value="0"/>
+    </group_state>
+    <group_state name="object_orbit_ready_right_arm" group="rby1_right_arm">
+        <joint name="right_arm_0" value="0"/>
+        <joint name="right_arm_1" value="0."/>
+        <joint name="right_arm_2" value="0"/>
+        <joint name="right_arm_3" value="-2.094"/>
+        <joint name="right_arm_4" value="0"/>
+        <joint name="right_arm_5" value="1.222"/>
         <joint name="right_arm_6" value="0"/>
     </group_state>
 
