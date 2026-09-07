@@ -1,4 +1,4 @@
-To run pure keyboard control for base:
+# basic bringup (RUN FIRST)
 ros2 launch rby1_bringup bringup.launch.py robot_ip:=192.168.30.1:50051
 
 # running from workstation
@@ -7,6 +7,39 @@ socat TCP-LISTEN:50051,fork,reuseaddr TCP:192.168.30.1:50051
 # bringup (from workstation, use upc ip)
 ros2 launch rby1_bringup bringup.launch.py robot_ip:=192.168.1.2:50051
 
+# moveit 2 with visualization
+ros2 launch rby1_moveit_config rby1_moveit.launch.py
+
+# control gripper from workstation
+# on upc
+socat TCP-LISTEN:9000,reuseaddr,fork FILE:/dev/rby1_gripper,b2000000,raw,echo=0
+# on workstation
+socat PTY,link=/tmp/rby1_gripper,raw,echo=0 TCP:<JETSON_IP>:9000
+
+# mocap
+ros2 launch mocap4r2_optitrack_driver optitrack2.launch.py
+ros2 lifecycle set /mocap4r2_optitrack_driver_node activate
+
+# moveit-related commands (jason)
+cd isaac_ros2/ros/moveit_ws
+source install/setup.bash
+source .moveit.venv/bin/activate
+# nbv command
+ros2 launch rby1_grasp goto_nbv.launch.py sim:=False
+# basic realsense scan command
+ros2 launch rby1_grasp realsense_scan_centroid.launch.py sim:=False
+
+
+# run nbv mapping live (on robot)
+cd ~/ros2_ws && source setup_env.sh
+  ros2 launch nbv_mapping_ros2 mapping.launch.py \
+      args_file:=nbv_mapping_ws/src/nbv_mapping_ros2/config/full_example_with_zed.args_anygrasp.yaml
+
+# bagging data
+ros2 bag record $(cat ~/ros2_ws/isaac_ros2/res/bagging/<your_textfile>.txt)
+
+To run pure keyboard control for base:
+ros2 launch rby1_bringup bringup.launch.py robot_ip:=192.168.30.1:50051
 ros2 run pynput_teleop_twist_keyboard pynput_teleop_twist_keyboard –ros-args –remap cmd_vel:=rby1_base_controller/cmd_vel
 
 To run simple manipulation demo (updated 3/31/26):
@@ -163,6 +196,14 @@ ros2 run tf2_ros static_transform_publisher 0.01010 -0.00262 0.03941 -0.00221 0.
 
 # get static transform for moving base (world -> odom)
 ros2 run tf2_ros static_transform_publisher 0 0 0 0 0 0 1 world odom
+
+# centroid from segmentation
+# for one object
+ros2 run jmsalmon_pcl pointcloud_centroid --ros-args --remap /sim_camera_points_filtered:=/nbv_mapper/zed_objects/<object>
+# for all objects
+ros2 run jmsalmon_pcl pointcloud_centroid --ros-args --remap /sim_camera_points_filtered:=/nbv_mapper/zed_object/
+
+
 
 ros2 run rby1_moveit_client wrist_scan_capture
 
