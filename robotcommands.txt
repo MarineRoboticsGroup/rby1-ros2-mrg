@@ -10,11 +10,20 @@ ros2 launch rby1_bringup bringup.launch.py robot_ip:=192.168.1.2:50051
 # moveit 2 with visualization
 ros2 launch rby1_moveit_config rby1_moveit.launch.py
 
-# control gripper from workstation
+# control gripper from workstation ------------------------------
 # on upc
 socat TCP-LISTEN:9000,reuseaddr,fork FILE:/dev/rby1_gripper,b2000000,raw,echo=0
 # on workstation
-socat PTY,link=/tmp/rby1_gripper,raw,echo=0 TCP:<JETSON_IP>:9000
+socat PTY,link=/tmp/rby1_gripper,raw,echo=0 TCP:192.168.1.2:9000
+# gripper service
+source /opt/venv_rby1/bin/activate
+ros2 run rby1_grasp control_gripper.svc.py 
+# gripper script
+cd ~/ros2_ws/isaac_ros2/ros/moveit_ws/
+source install/setup.bash
+source .moveit.venv/bin/activate
+ros2 launch rby1_grasp attempt_grasp.anygrasp.launch.py sim:=False (reset_robot:=True) # load whole_body controller first from controller_manager GUI
+# -----------------------------------------------------------------
 
 # mocap
 ros2 launch mocap4r2_optitrack_driver optitrack2.launch.py
