@@ -1,14 +1,19 @@
+########################################
+CONNECT TO ROBOT HOTSPOT
+########################################
+
+http://192.168.30.1:5173/controls
+
+########################################
+
 # basic bringup (RUN FIRST)
 ros2 launch rby1_bringup bringup.launch.py robot_ip:=192.168.30.1:50051
-
-# running from workstation
+# running bringup from workstation -----------------------------------
 # port forwarding (upc)
 socat TCP-LISTEN:50051,fork,reuseaddr TCP:192.168.30.1:50051
 # bringup (from workstation, use upc ip)
 ros2 launch rby1_bringup bringup.launch.py robot_ip:=192.168.1.2:50051
-
-# moveit 2 with visualization
-ros2 launch rby1_moveit_config rby1_moveit.launch.py
+# --------------------------------------------------------------------
 
 # control gripper from workstation ------------------------------
 # on upc
@@ -29,6 +34,9 @@ ros2 launch rby1_grasp attempt_grasp.anygrasp.launch.py sim:=False (reset_robot:
 ros2 launch mocap4r2_optitrack_driver optitrack2.launch.py
 ros2 lifecycle set /mocap4r2_optitrack_driver_node activate
 
+# moveit 2 with visualization
+ros2 launch rby1_moveit_config rby1_moveit.launch.py
+
 # moveit-related commands (jason)
 cd isaac_ros2/ros/moveit_ws
 source install/setup.bash
@@ -41,8 +49,21 @@ ros2 launch rby1_grasp realsense_scan_centroid.launch.py sim:=False
 
 # run nbv mapping live (on robot)
 cd ~/ros2_ws && source setup_env.sh
-  ros2 launch nbv_mapping_ros2 mapping.launch.py \
-      args_file:=nbv_mapping_ws/src/nbv_mapping_ros2/config/full_example_with_zed.args_anygrasp.yaml
+  CUDA_VISIBLE_DEVICES=1 ros2 launch nbv_mapping_ros2 mapping.launch.py \
+      args_file:=nbv_mapping_ws/src/nbv_mapping_ros2/config/full_example_with_zed.args_anygrasp_once.yaml
+
+# run nbv planning live (on robot)
+source ~/ros2_ws/nbv_planner_ws/install/setup.bash
+ros2 launch nbv_planner_ros2 planner.launch.py use_sim_time:=false viser_port:=8126 rviz:=true
+
+# run loop based on planning
+cd ~/ros2_ws/isaac_ros2/ros/moveit_ws
+source install/setup.bash
+source .moveit.venv/bin/activate            # prompt must show (.moveit.venv)
+source ~/ros2_ws/nbv_planner_ws/install/setup.bash
+ros2 launch rby1_grasp nbv_loop.launch.py sim:=false max_views:=1 pregrasp:=true    # first view, collision-checked
+ros2 launch rby1_grasp nbv_loop.launch.py sim:=false max_views:=4 pregrasp:=true    # the loop
+
 
 # bagging data
 ros2 bag record $(cat ~/ros2_ws/isaac_ros2/res/bagging/<your_textfile>.txt)
@@ -168,8 +189,6 @@ ros2 bag record --max-cache-size 500000000 /tf_static /tf /wrist_scan/state /cam
 colcon build --packages-select relative_tf_publisher
 
 ros2 run apriltag_detector apriltag_detector_node
-
-http://192.168.30.1:5173/controls
 
 ros2 bag record --max-cache-size 500000000 /zed2i/zed_node/left/image_rect_color /zed2i/zed_node/left/camera_info /zed2i/zed_node/depth/depth_registered /tf_static /tf
 
