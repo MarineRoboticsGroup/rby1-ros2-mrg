@@ -564,12 +564,6 @@
                 <mesh filename="package://rby1_description/meshes/EE_FINGER.dae"/>
             </geometry>
         </visual>
-        <collision>
-            <origin xyz="-0.005 0 -0.03" rpy="0 0 0"/>
-            <geometry>
-                <cylinder radius="0.015" length="0.08"/>
-            </geometry>
-        </collision>
     </link>
 
     <!-- ee_left -->
@@ -630,12 +624,6 @@
                 <mesh filename="package://rby1_description/meshes/EE_FINGER.dae"/>
             </geometry>
         </visual>
-        <collision>
-            <origin xyz="-0.005 0 -0.03" rpy="0 0 0"/>
-            <geometry>
-                <cylinder radius="0.015" length="0.08"/>
-            </geometry>
-        </collision>
     </link>
 
     <link name="link_right_eef"/>
@@ -1001,7 +989,7 @@
     <joint name="gripper_finger_r1" type="fixed">
         <parent link="ee_right"/>
         <child link="ee_finger_r1"/>
-        <origin rpy="0.0 0.0 0.0" xyz="0.053 0.0 -0.073"/>
+        <origin rpy="0.0 0.0 0.0" xyz="0.003 0.0 -0.073"/>
         <axis xyz="-1 0 0"/>
         <limit effort="1000" velocity="0.05" lower="-0.05" upper="0"/>
     </joint>
@@ -1009,7 +997,7 @@
     <joint name="gripper_finger_r2" type="fixed">
         <parent link="ee_right"/>
         <child link="ee_finger_r2"/>
-        <origin rpy="0.0 0.0 3.1415926535" xyz="-0.053 0.0 -0.073"/>
+        <origin rpy="0.0 0.0 3.1415926535" xyz="-0.003 0.0 -0.073"/>
         <axis xyz="1 0 0"/>
         <limit effort="1000" velocity="0.05" lower="0" upper="0.05"/>
     </joint>
@@ -1030,7 +1018,7 @@
     <joint name="gripper_finger_l1" type="fixed">
         <parent link="ee_left"/>
         <child link="ee_finger_l1"/>
-        <origin rpy="0.0 0.0 0.0" xyz="0.053 0.0 -0.073"/>
+        <origin rpy="0.0 0.0 0.0" xyz="0.003 0.0 -0.073"/>
         <axis xyz="-1 0 0"/>
         <limit effort="1000" velocity="0.05" lower="-0.05" upper="0"/>
     </joint>
@@ -1038,7 +1026,7 @@
     <joint name="gripper_finger_l2" type="fixed">
         <parent link="ee_left"/>
         <child link="ee_finger_l2"/>
-        <origin rpy="0.0 0.0 3.1415926535" xyz="-0.053 0.0 -0.073"/>
+        <origin rpy="0.0 0.0 3.1415926535" xyz="-0.003 0.0 -0.073"/>
         <axis xyz="1 0 0"/>
         <limit effort="1000" velocity="0.05" lower="0" upper="0.05"/>
     </joint>
